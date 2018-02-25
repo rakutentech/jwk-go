@@ -1,4 +1,4 @@
-# jwk-go [![GoDoc](https://godoc.org/github.com/rakutentech/jwk-go?status.svg)](https://godoc.org/github.com/rakutentech/jwk-go) [![Go Report Card](https://goreportcard.com/badge/github.com/rakutentech/jwk-go)](https://goreportcard.com/report/github.com/rakutentech/jwk-go)
+# jwk-go [![GoDoc](https://godoc.org/github.com/rakutentech/jwk-go?status.svg)](https://godoc.org/github.com/rakutentech/jwk-go) [![Build Status](https://travis-ci.org/rakutentech/jwkgen.svg?branch=master)](https://travis-ci.org/rakutentech/jwkgen) [![Go Report Card](https://goreportcard.com/badge/github.com/rakutentech/jwk-go)](https://goreportcard.com/report/github.com/rakutentech/jwk-go)
 
 ## Overview
 
