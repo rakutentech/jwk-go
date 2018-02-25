@@ -8,6 +8,7 @@ env:
   - GOMAXPROCS=4 GORACE=halt_on_error=1
 install:
   - go get -t -v ./...
+  - go get -u github.com/onsi/ginkgo/ginkgo
 before_script:
     - go vet ./...
 script:
