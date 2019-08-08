@@ -12,7 +12,7 @@ hurdles as minimum as possible. That being said, we do have some guidelines
 
 Please open a pull request with the branch that contains the code you want to
 contribute. The pull request should include a proper description of the bug
-you're fixeing and the feature you're adding, as well as all relevant
+you're fixing and the feature you're adding, as well as all relevant
 technical details (e.g. adding a new dependency).
 
 ## Coding Style
