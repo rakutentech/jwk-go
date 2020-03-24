@@ -1,8 +1,7 @@
 language: go
 go:
-  - 1.7.x
-  - 1.8.x
   - 1.9.x
+  - 1.12.x
   - tip
 env:
   - GOMAXPROCS=4 GORACE=halt_on_error=1
@@ -10,7 +9,7 @@ install:
   - go get -t -v ./...
   - go get -u github.com/onsi/ginkgo/ginkgo
 before_script:
-    - go vet ./...
+  - go vet ./...
 script:
   - ginkgo -r
   - go test -race -v ./...
