@@ -22,3 +22,41 @@ type JWK struct {
 	// Symmetric Keys
 	K *keyBytes `json:"k,omitempty"`
 }
+
+func (jwk *JWK) MarshalJSON() ([]byte, error) {
+	m := newOrderedJsonMarshaller(128)
+
+	var err error
+	err = m.marshalString("kid", jwk.Kid)
+	if err != nil {
+		return nil, err
+	}
+	err = m.marshalString("kty", jwk.Kty)
+	if err != nil {
+		return nil, err
+	}
+	err = m.marshalString("use", jwk.Use)
+	if err != nil {
+		return nil, err
+	}
+	err = m.marshalString("alg", jwk.Alg)
+	if err != nil {
+		return nil, err
+	}
+	err = m.marshalString("crv", jwk.Crv)
+	if err != nil {
+		return nil, err
+	}
+	m.marshalBytes("x", jwk.X)
+	m.marshalBytes("y", jwk.Y)
+	m.marshalBytes("n", jwk.N)
+	m.marshalBytes("e", jwk.E)
+	m.marshalBytes("d", jwk.D)
+	m.marshalBytes("p", jwk.P)
+	m.marshalBytes("q", jwk.Q)
+	m.marshalBytes("k", jwk.K)
+
+	data := m.finalize()
+
+	return data, nil
+}

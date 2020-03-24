@@ -64,6 +64,7 @@ func convertToJWK(keyInterface interface{}) (*JWK, error) {
 	switch key := keyInterface.(type) {
 	case []byte:
 		return &JWK{
+			Kty: "oct",
 			K: keyBytesFrom(key),
 		}, nil
 	case *rsa.PublicKey:

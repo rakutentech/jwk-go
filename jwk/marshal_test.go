@@ -212,6 +212,34 @@ var _ = Describe("KeySpecSet", func() {
 		verifyEd25519KeySpec(&ks.Keys[3])
 	})
 
+	It("Should round-trip with long keys", func() {
+		keySpecs := KeySpecSet{
+			Keys: []KeySpec{
+			},
+		}
+
+		for _, size := range []int{1024, 3123, 94973} {
+			keySpecs.Keys = append(keySpecs.Keys, KeySpec{
+				Key:       X25519Example,
+				KeyID:     randomString(size),
+				Algorithm: "ECDH-ES",
+				Use:       "enc",
+			})
+			keySpecs.Keys = append(keySpecs.Keys, KeySpec{
+				Key:       randomBytes(size),
+				KeyID:     randomString(32),
+				Algorithm: "Custom",
+			})
+		}
+
+		b, err := json.Marshal(keySpecs)
+		Expect(err).To(Succeed())
+		var ks KeySpecSet
+		err = json.Unmarshal(b, &ks)
+		Expect(err).To(Succeed())
+		Expect(ks).To(Equal(keySpecs))
+	})
+
 	It("Extract public key", func() {
 		b, err := keySpecFixture.MarshalPublicJSON()
 		Expect(err).To(Succeed())
@@ -278,4 +306,17 @@ func testOKPPublicOnly(key okp.CurveOctetKeyPair) {
 	publicOKP, ok := publicOnly.Key.(okp.CurveOctetKeyPair)
 	Expect(ok).To(BeTrue())
 	Expect(publicOKP.PublicKey()).To(Equal(key.PublicKey()))
+}
+
+func randomBytes(size int) []byte {
+	b := make([]byte, size)
+	_, err := rand.Reader.Read(b)
+	if err != nil {
+		panic(err)
+	}
+	return b
+}
+
+func randomString(size int) string {
+	return base64.RawStdEncoding.EncodeToString(randomBytes(size))
 }
