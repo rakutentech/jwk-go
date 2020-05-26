@@ -109,7 +109,7 @@ func (jwk *JWK) unmarshalRSA() (interface{}, error) {
 	return &rsa.PrivateKey{
 		PublicKey: public,
 		D:         jwk.D.toBigInt(),
-		Primes:    []*big.Int{jwk.Q.toBigInt(), jwk.P.toBigInt()},
+		Primes:    []*big.Int{jwk.P.toBigInt(), jwk.Q.toBigInt()},
 	}, nil
 }
 

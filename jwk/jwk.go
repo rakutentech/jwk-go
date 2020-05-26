@@ -18,6 +18,9 @@ type JWK struct {
 	D *keyBytes `json:"d,omitempty"`
 	P *keyBytes `json:"p,omitempty"`
 	Q *keyBytes `json:"q,omitempty"`
+	Dp *keyBytes `json:"dp,omitempty"`
+	Dq *keyBytes `json:"dq,omitempty"`
+	Qi *keyBytes `json:"qi,omitempty"`
 
 	// Symmetric Keys
 	K *keyBytes `json:"k,omitempty"`
@@ -55,6 +58,9 @@ func (jwk *JWK) MarshalJSON() ([]byte, error) {
 	m.marshalBytes("p", jwk.P)
 	m.marshalBytes("q", jwk.Q)
 	m.marshalBytes("k", jwk.K)
+	m.marshalBytes("dp", jwk.Dp)
+	m.marshalBytes("dq", jwk.Dq)
+	m.marshalBytes("qi", jwk.Qi)
 
 	data := m.finalize()
 

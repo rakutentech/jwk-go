@@ -129,6 +129,12 @@ func fromRSAPrivate(private *rsa.PrivateKey) (*JWK, error) {
 	jwk.D = keyBytesFrom(private.D.Bytes())
 	jwk.P = keyBytesFrom(private.Primes[0].Bytes())
 	jwk.Q = keyBytesFrom(private.Primes[1].Bytes())
+
+	// JWK RSA representations should have the precomputed values 'dp', 'dq' and 'qi'
+	private.Precompute()
+	jwk.Dp = keyBytesFrom(private.Precomputed.Dp.Bytes())
+	jwk.Dq = keyBytesFrom(private.Precomputed.Dq.Bytes())
+	jwk.Qi = keyBytesFrom(private.Precomputed.Qinv.Bytes())
 	return jwk, nil
 }
 

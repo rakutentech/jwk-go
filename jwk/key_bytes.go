@@ -26,7 +26,7 @@ func keyBytesFromUInt64(i uint64) *keyBytes {
 	binary.BigEndian.PutUint64(data, i)
 	for i := range data {
 		if data[i] != 0 {
-			return &keyBytes{data[:i]}
+			return &keyBytes{data[i:]}
 		}
 	}
 	return nil
