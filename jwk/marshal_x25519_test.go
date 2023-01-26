@@ -12,15 +12,14 @@ import (
 )
 
 const (
-	X25519x  = "clZuS2tYN30tAfpCQ3Ln3RpJXc9dZKei23RkEmZVHVo"
-	X25519d  = "JeYekQrtVwjGtGGQbj-zWhTLMrgTF5wsUnZYKQdy8yE"
+	X25519x = "clZuS2tYN30tAfpCQ3Ln3RpJXc9dZKei23RkEmZVHVo"
+	X25519d = "JeYekQrtVwjGtGGQbj-zWhTLMrgTF5wsUnZYKQdy8yE"
 )
 
 var X25519Example = okp.NewCurve25519(
 	testutils.MustDecodeBase64URL(X25519x),
 	testutils.MustDecodeBase64URL(X25519d),
 )
-
 
 var _ = Describe("Curve25519", func() {
 	It("Should decode a valid Ed25519 key (and ignore unknown fields)", func() {
@@ -74,4 +73,3 @@ func verifyX25519KeySpecWith(k *KeySpec, publicOnly bool) {
 		Expect(base64.RawURLEncoding.EncodeToString(curveOKP.PrivateKey())).To(Equal(X25519d))
 	}
 }
-

@@ -91,8 +91,7 @@ var _ = Describe("KeySpecSet", func() {
 
 	It("Should round-trip with long keys", func() {
 		keySpecs := KeySpecSet{
-			Keys: []KeySpec{
-			},
+			Keys: []KeySpec{},
 		}
 
 		for _, size := range []int{1024, 3123, 94973} {
