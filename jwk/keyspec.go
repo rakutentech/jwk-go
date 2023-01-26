@@ -6,6 +6,7 @@ import (
 	"crypto/rsa"
 	"encoding/json"
 	"errors"
+	"time"
 
 	"github.com/rakutentech/jwk-go/okp"
 )
@@ -17,6 +18,7 @@ type KeySpec struct {
 	KeyID     string
 	Algorithm string
 	Use       string
+	ExpiresAt time.Time
 }
 
 // KeySpecSet represents a set of parsed JSON Web Keys
@@ -113,6 +115,11 @@ func (k *KeySpec) PublicOnly() (*KeySpec, error) {
 		KeyID:     k.KeyID,
 		Use:       k.Use,
 	}, nil
+}
+
+// IsValid returns true if the key is valid, i.e. it is not expired yet or has no expiry set
+func (k *KeySpec) IsValid() bool {
+	return k.ExpiresAt.IsZero() || k.ExpiresAt.Before(time.Now())
 }
 
 // Clone creates a copy of a KeySpec

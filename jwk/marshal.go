@@ -57,6 +57,7 @@ func (k *KeySpec) ToJWK() (*JWK, error) {
 	jwk.Kid = k.KeyID
 	jwk.Alg = k.Algorithm
 	jwk.Use = k.Use
+	jwk.Exp = k.ExpiresAt.Unix()
 	return jwk, nil
 }
 
@@ -65,7 +66,7 @@ func convertToJWK(keyInterface interface{}) (*JWK, error) {
 	case []byte:
 		return &JWK{
 			Kty: "oct",
-			K: keyBytesFrom(key),
+			K:   keyBytesFrom(key),
 		}, nil
 	case *rsa.PublicKey:
 		return fromRSAPublic(key)

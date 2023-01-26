@@ -15,15 +15,18 @@ type JWK struct {
 	E *keyBytes `json:"e,omitempty"`
 
 	// Private Fields
-	D *keyBytes `json:"d,omitempty"`
-	P *keyBytes `json:"p,omitempty"`
-	Q *keyBytes `json:"q,omitempty"`
+	D  *keyBytes `json:"d,omitempty"`
+	P  *keyBytes `json:"p,omitempty"`
+	Q  *keyBytes `json:"q,omitempty"`
 	Dp *keyBytes `json:"dp,omitempty"`
 	Dq *keyBytes `json:"dq,omitempty"`
 	Qi *keyBytes `json:"qi,omitempty"`
 
 	// Symmetric Keys
 	K *keyBytes `json:"k,omitempty"`
+
+	// Non-standard (but absolutely necessary!) fields
+	Exp int64 `json:"exp"`
 }
 
 func (jwk *JWK) MarshalJSON() ([]byte, error) {

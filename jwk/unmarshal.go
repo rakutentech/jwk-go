@@ -1,15 +1,15 @@
 package jwk
 
 import (
-	"encoding/json"
-
 	"crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/rsa"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"math"
 	"math/big"
+	"time"
 
 	"github.com/rakutentech/jwk-go/jwktypes"
 	"github.com/rakutentech/jwk-go/okp"
@@ -32,6 +32,7 @@ func (k *KeySpec) UnmarshalJSON(data []byte) error {
 	k.KeyID = jwk.Kid
 	k.Algorithm = jwk.Alg
 	k.Use = jwk.Use
+	k.ExpiresAt = time.Unix(jwk.Exp, 0)
 
 	return nil
 }
