@@ -39,3 +39,11 @@ func (k *KeySpec) KeyType() (kty string, curve string, private bool) {
 	}
 	return
 }
+
+func (k *KeySpec) CoerceOkpCurve(curve string) okp.CurveOctetKeyPair {
+	curveOKP, ok := k.Key.(okp.CurveOctetKeyPair)
+	if ok && curveOKP.Curve() == curve {
+		return curveOKP
+	}
+	return nil
+}

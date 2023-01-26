@@ -81,10 +81,8 @@ func (ks KeySpecSet) PrimaryKey(keyType string) *KeySpec {
 // the key type will be checked.
 func (ks KeySpecSet) PrimaryCurveOKP(curve string) (*KeySpec, okp.CurveOctetKeyPair) {
 	for _, k := range ks.Keys {
-		curveOKP, ok := k.Key.(okp.CurveOctetKeyPair)
-		if ok && curveOKP.Curve() == curve {
-			return &k, curveOKP
-		}
+		curveOKP := k.CoerceOkpCurve(curve)
+		return &k, curveOKP
 	}
 	return nil, nil
 }
