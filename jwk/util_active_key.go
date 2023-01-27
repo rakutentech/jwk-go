@@ -9,6 +9,6 @@ func (ks KeySpecSet) ActiveKey() *KeySpec {
 	if l == 0 {
 		return nil
 	}
-	middlemostPosition := (l + 1) / 2
+	middlemostPosition := (l - 1) / 2
 	return &ks.Keys[middlemostPosition]
 }
