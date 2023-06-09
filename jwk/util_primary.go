@@ -2,6 +2,7 @@ package jwk
 
 import (
 	"crypto/ecdsa"
+
 	"github.com/rakutentech/jwk-go/okp"
 )
 
@@ -31,7 +32,9 @@ func (ks KeySpecSet) PrimaryKey(keyType string) *KeySpec {
 func (ks KeySpecSet) PrimaryCurveOKP(curve string) (*KeySpec, okp.CurveOctetKeyPair) {
 	for _, k := range ks.Keys {
 		curveOKP := k.CoerceOkpCurve(curve)
-		return &k, curveOKP
+		if curveOKP != nil {
+			return &k, curveOKP
+		}
 	}
 	return nil, nil
 }
