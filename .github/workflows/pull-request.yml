@@ -14,10 +14,7 @@ jobs:
     - run: go mod tidy && git diff --exit-code go.mod go.sum
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        version: [ 'oldstable', 'stable' ]
-    name: Go ${{ matrix.version }}
+    name: Build and test
     steps:
     - uses: actions/setup-go@v5
       with:
