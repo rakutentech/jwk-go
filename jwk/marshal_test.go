@@ -4,9 +4,11 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"encoding/json"
+	"time"
 
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
+
 	"github.com/rakutentech/jwk-go/internal/testutils"
 	"github.com/rakutentech/jwk-go/okp"
 )
@@ -136,7 +138,7 @@ func publicOrPrivate(public bool) string {
 	return "private"
 }
 
-func testCurveOKP(curve string, key okp.CurveOctetKeyPair, withPrivate bool) {
+func testCurveOKP(curve string, key okp.CurveOctetKeyPair, withPrivate bool, expireAt time.Time) {
 	var err error
 	if !withPrivate {
 		key, err = okp.NewCurveOKP(key.Curve(), key.PublicKey(), nil)
@@ -145,6 +147,10 @@ func testCurveOKP(curve string, key okp.CurveOctetKeyPair, withPrivate bool) {
 	k := KeySpec{
 		Key:   key,
 		KeyID: "foo",
+	}
+
+	if !expireAt.IsZero() {
+		k.ExpiresAt = expireAt
 	}
 
 	// Marshal
@@ -160,6 +166,11 @@ func testCurveOKP(curve string, key okp.CurveOctetKeyPair, withPrivate bool) {
 		Expect(m).To(HaveKeyWithValue("d", base64.RawURLEncoding.EncodeToString(key.PrivateKey())))
 	} else {
 		Expect(m).ToNot(HaveKey("d"))
+	}
+	if expireAt.IsZero() {
+		Expect(m).ToNot(HaveKey("exp"))
+	} else {
+		Expect(m).To(HaveKeyWithValue("exp", float64(expireAt.Unix())))
 	}
 
 	// Unmarshal

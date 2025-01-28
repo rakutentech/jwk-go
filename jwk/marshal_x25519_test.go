@@ -4,10 +4,12 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"encoding/json"
+	"time"
+
 	"github.com/rakutentech/jwk-go/internal/testutils"
 	"github.com/rakutentech/jwk-go/okp"
 
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 )
 
@@ -41,8 +43,11 @@ var _ = Describe("Curve25519", func() {
 	It("Should round-trip encode and parse correctly", func() {
 		key, err := okp.GenerateCurve25519(rand.Reader)
 		Expect(err).To(Succeed())
-		testCurveOKP("X25519", key, false)
-		testCurveOKP("X25519", key, true)
+		now := time.Now().Truncate(time.Second)
+		testCurveOKP("X25519", key, false, time.Time{})
+		testCurveOKP("X25519", key, true, time.Time{})
+		testCurveOKP("X25519", key, false, now)
+		testCurveOKP("X25519", key, true, now)
 	})
 
 	It("Extract public key", func() {
