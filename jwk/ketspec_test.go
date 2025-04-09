@@ -1,7 +1,10 @@
 package jwk
 
 import (
+	"crypto/rand"
+	"crypto/rsa"
 	"encoding/json"
+	"time"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -60,4 +63,21 @@ var _ = Describe("Key spec set", func() {
 		Expect(keySpec.KeyID).To(Equal("key1"))
 		Expect(privateKey.Curve.Params().Name).To(Equal("P-256"))
 	})
+})
+
+var _ = Describe("KeySpec expiry test", func() {
+	rsaKey, err := rsa.GenerateKey(rand.Reader, 2048)
+	Expect(err).ShouldNot(HaveOccurred())
+
+	specNoExpire := NewSpecWithID("no-expire", rsaKey)
+	specNoExpire.ExpiresAt = time.Time{}
+	Expect(specNoExpire.IsValid()).Should(BeTrue())
+
+	specExpireFuture := NewSpecWithID("expire-in-future", rsaKey)
+	specExpireFuture.ExpiresAt = time.Now().Add(time.Hour)
+	Expect(specExpireFuture.IsValid()).Should(BeTrue())
+
+	specExpirePast := NewSpecWithID("expire-in-past", rsaKey)
+	specExpirePast.ExpiresAt = time.Now().Add(time.Hour * -1)
+	Expect(specExpirePast.IsValid()).Should(BeFalse())
 })
