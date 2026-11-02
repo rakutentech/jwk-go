@@ -8,6 +8,7 @@ import (
 	"errors"
 	"time"
 
+	"github.com/rakutentech/jwk-go/akp"
 	"github.com/rakutentech/jwk-go/okp"
 )
 
@@ -79,6 +80,8 @@ func (k *KeySpec) IsPublic() bool {
 	switch key := k.Key.(type) {
 	case okp.CurveOctetKeyPair:
 		return key.PrivateKey() == nil
+	case akp.Key:
+		return key.PrivateKey() == nil
 	case *ecdsa.PublicKey, *rsa.PublicKey:
 		return true
 	default:
@@ -106,6 +109,11 @@ func (k *KeySpec) PublicOnly() (*KeySpec, error) {
 		if err != nil {
 			return nil, err
 		}
+	case akp.Key:
+		if key.PrivateKey() == nil {
+			return k, nil // Already public-only
+		}
+		pubKey = key.ExtractPublic()
 	default:
 		return nil, errors.New("key type does not support extracting the public key")
 	}

@@ -5,6 +5,7 @@ import (
 	"crypto/rsa"
 	"strconv"
 
+	"github.com/rakutentech/jwk-go/akp"
 	"github.com/rakutentech/jwk-go/jwktypes"
 	"github.com/rakutentech/jwk-go/okp"
 )
@@ -35,6 +36,10 @@ func (k *KeySpec) KeyType() (kty string, curve string, private bool) {
 	case okp.CurveOctetKeyPair:
 		kty = jwktypes.OKP
 		curve = key.Curve()
+		private = key.PrivateKey() != nil
+	case akp.Key:
+		kty = jwktypes.AKP
+		curve = key.Algorithm()
 		private = key.PrivateKey() != nil
 	}
 	return

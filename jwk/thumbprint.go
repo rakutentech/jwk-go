@@ -11,6 +11,7 @@ import (
 
 	"hash"
 
+	"github.com/rakutentech/jwk-go/akp"
 	"github.com/rakutentech/jwk-go/okp"
 )
 
@@ -29,6 +30,7 @@ const rsaThumb = `{"e":"%s","kty":"RSA","n":"%s"}`
 const ecThumb = `{"crv":"%s","kty":"EC","x":"%s","y":"%s"}`
 const octThumb = `{"k":"%s","kty":"oct"}`
 const okpThumb = `{"crv":"%s","kty":"OKP","x":"%s"}`
+const akpThumb = `{"alg":"%s","kty":"AKP","pub":"%s"}`
 
 func writeRSAThumbprint(w io.Writer, key *rsa.PublicKey) error {
 	k, err := fromRSAPublic(key)
@@ -56,6 +58,10 @@ func writeCurveOKPThumbprint(w io.Writer, key okp.CurveOctetKeyPair) {
 	fmt.Fprintf(w, okpThumb, key.Curve(), base64.RawURLEncoding.EncodeToString(key.PublicKey()))
 }
 
+func writeAKPThumbprint(w io.Writer, key akp.Key) {
+	fmt.Fprintf(w, akpThumb, key.Algorithm(), base64.RawURLEncoding.EncodeToString(key.PublicKey()))
+}
+
 func writeAnyThumbprint(w io.Writer, key interface{}) error {
 	switch k := key.(type) {
 	case *rsa.PrivateKey:
@@ -68,6 +74,8 @@ func writeAnyThumbprint(w io.Writer, key interface{}) error {
 		return writeECThumbprint(w, k)
 	case okp.CurveOctetKeyPair:
 		writeCurveOKPThumbprint(w, k)
+	case akp.Key:
+		writeAKPThumbprint(w, k)
 	case []byte:
 		writeOctThumbprint(w, k)
 	default:

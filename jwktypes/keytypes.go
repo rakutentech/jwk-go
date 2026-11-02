@@ -14,4 +14,8 @@ const (
 	// OctetKey is essentially a raw byte array often used with symmetric
 	// algorithms such as HMAC, ChaPoly or different AES modes.
 	OctetKey = "oct"
+
+	// AKP represents algorithm key pairs used with post-quantum signature
+	// algorithms such as ML-DSA (FIPS 204). See draft-ietf-jose-pqc.
+	AKP = "AKP"
 )
