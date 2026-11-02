@@ -25,6 +25,10 @@ type JWK struct {
 	// Symmetric Keys
 	K *keyBytes `json:"k,omitempty"`
 
+	// Algorithm Key Pair fields (AKP, e.g. ML-DSA) per draft-ietf-jose-pqc
+	Pub  *keyBytes `json:"pub,omitempty"`
+	Priv *keyBytes `json:"priv,omitempty"`
+
 	// Non-standard (but absolutely necessary!) fields
 	Exp int64 `json:"exp"`
 }
@@ -65,6 +69,8 @@ func (jwk *JWK) MarshalJSON() ([]byte, error) {
 	m.marshalBytes("dp", jwk.Dp)
 	m.marshalBytes("dq", jwk.Dq)
 	m.marshalBytes("qi", jwk.Qi)
+	m.marshalBytes("pub", jwk.Pub)
+	m.marshalBytes("priv", jwk.Priv)
 
 	data := m.finalize()
 

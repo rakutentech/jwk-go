@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/rakutentech/jwk-go/akp"
 	"github.com/rakutentech/jwk-go/jwktypes"
 	"github.com/rakutentech/jwk-go/okp"
 )
@@ -82,9 +83,24 @@ func convertToJWK(keyInterface interface{}) (*JWK, error) {
 		return fromECPrivate(key)
 	case okp.CurveOctetKeyPair:
 		return fromOKP(key), nil
+	case akp.Key:
+		return fromAKP(key), nil
 	default:
 		return nil, errors.New("unsupported key type (cannot convert to JWK)")
 	}
+}
+
+func fromAKP(key akp.Key) *JWK {
+	var jwk JWK
+
+	jwk.Kty = jwktypes.AKP
+	jwk.Alg = key.Algorithm()
+	jwk.Pub = &keyBytes{key.PublicKey()}
+	if privKey := key.PrivateKey(); privKey != nil {
+		jwk.Priv = &keyBytes{privKey}
+	}
+
+	return &jwk
 }
 
 func fromOKP(kp okp.CurveOctetKeyPair) *JWK {

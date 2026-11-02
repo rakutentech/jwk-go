@@ -11,6 +11,7 @@ import (
 	"math/big"
 	"time"
 
+	"github.com/rakutentech/jwk-go/akp"
 	"github.com/rakutentech/jwk-go/jwktypes"
 	"github.com/rakutentech/jwk-go/okp"
 )
@@ -76,9 +77,27 @@ func convertFromJwk(jwk *JWK) (interface{}, error) {
 		return jwk.unmarshalRSA()
 	case jwktypes.OKP:
 		return jwk.unmarshalOKP()
+	case jwktypes.AKP:
+		return jwk.unmarshalAKP()
 	default:
 		return nil, fmt.Errorf("unknown key type: %s", jwk.Kty)
 	}
+}
+
+func (jwk *JWK) unmarshalAKP() (akp.Key, error) {
+	if jwk.Pub == nil {
+		return akp.Key{}, errors.New("missing field pub for AKP key")
+	}
+	if jwk.Alg == "" {
+		return akp.Key{}, errors.New("missing field alg for AKP key")
+	}
+
+	var privKey []byte
+	if jwk.Priv != nil {
+		privKey = jwk.Priv.data
+	}
+
+	return akp.NewKey(jwk.Alg, jwk.Pub.data, privKey)
 }
 
 func (jwk *JWK) unmarshalOctets() ([]byte, error) {
